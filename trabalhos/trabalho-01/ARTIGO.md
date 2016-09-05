@@ -18,16 +18,23 @@ Kotlin possui tipagem forte, estática e inferida.
 
 ## Avaliação Comparativa
 
-O principal diferencial de Kotlin é que esta linguagem diferencia variáveis nulas e não-nulas. Todos os objetos nulos devem ser declarados com um "?" logo após o nome do seu tipo de dado. Operações em objetos nulos precisam de cuidado especial dos programadores. Pensando nisso, Kotlin fornece duas operações que deixam os programadores seguros ao trabalhar com objetos nulos.
+#### Leitura
+Semelhante ao que acontece em Java, a leitura dos programas se torna mais díficil, por possuir muitas classes, bibliotecas e paradigmas diferentes.
 
-####Operador ?.
+#### Escrita
+Também semelhante ao que acontece em Java, a esrita é dinâmica e mais fácil de ser desenvolvida. A tipagem forte e inferida contribui para um código mais curto e mais fácil de se escrever.
+
+#### Expressividade
+Kotlin possui alto poder de expressão. O principal diferencial de Kotlin é que esta linguagem diferencia variáveis nulas e não-nulas. Todos os objetos nulos devem ser declarados com um "?" logo após o nome do seu tipo de dado. Operações em objetos nulos precisam de cuidado especial dos programadores. Pensando nisso, Kotlin fornece duas operações que deixam os programadores seguros ao trabalhar com objetos nulos.
+
+#####-> Operador ?.
 Exemplo:
 
     bob?.departamento?.chefe?.nome
     /* retorna o nome do chefe do departamento de Bob, caso Bob esteja em algum departamento
     e caso esse departamento tenha algum chefe */
 
-####Operador ?:
+#####-> Operador ?:
 Exemplo:
 
     fun sayHello(maybe : String?, neverNull : Int) {
