@@ -19,7 +19,7 @@ Kotlin possui tipagem forte, estática e inferida.
 ## Avaliação Comparativa
 
 #### Leitura
-Semelhante ao que acontece em Java, a leitura dos programas se torna mais díficil, por possuir muitas classes, bibliotecas e paradigmas diferentes.
+Semelhante ao que acontece em Java, a leitura dos programas se torna mais difícil, por possuir muitas classes, bibliotecas e paradigmas diferentes.
 
 #### Escrita
 Também semelhante ao que acontece em Java, a escrita é dinâmica e mais fácil de ser desenvolvida. A tipagem forte e inferida contribui para um código mais curto e mais fácil de se escrever.
