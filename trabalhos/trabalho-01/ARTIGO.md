@@ -19,7 +19,7 @@ Kotlin possui tipagem forte, estática e inferida.
 ## Avaliação Comparativa
 
 #### Leitura
-O código Kotlin é fácil de ser compreendido. É fácil identificar quais são as variáveis do programa, pois todas são iniciados por um identificador chamado val. A identação obrigatória também ajuda na leitura.
+O código Kotlin é fácil de ser compreendido. É fácil identificar quais são as variáveis do programa, pois todas são iniciadas por um identificador chamado 'val'. A identação obrigatória também ajuda na leitura.
 
 #### Escrita
 A escrita em Kotlin não é muito boa, por ser orientada a objetos e possuir muitas classes. Porém, comparando a Java, Kotlin possui a escrita melhor, pois tem o paradigma funcional nativo. A inferência de tipo também ajuda no seu writability.
