@@ -9,11 +9,7 @@ function love.load()
 	
 
 	record = 0
-	-- Nome: Variável 'record'
-	-- Propriedade: Endereço
-	-- Binding time: Compilação
-	-- Explicação: Por ser uma variável global(estática), o endereço é
-	-- pré determinado em tempo de compilação
+	
 	
 	objects = {}
 
@@ -100,6 +96,12 @@ function love.update(dt)
 		end
 		score = 0
 		objects.polygon.body:setPosition(love.graphics.getWidth()/2, love.graphics.getHeight()-7.5)
+		-- Nome: Operador '-'
+		-- Propriedade: Semântica da linguagem
+		-- Binding time: Compilação
+		-- Explicaçao: A instrução de subtração é definida em tempo de
+		-- compilação, dependendo dos tipos dos operandos
+		-- (double, float, int)
 		objects.ball.body:setPosition(love.graphics.getWidth()/2, 20)
 		objects.ball.body:setLinearVelocity(0, 900)
 	end
