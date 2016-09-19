@@ -6,9 +6,17 @@ function love.load()
 	world:setCallbacks(beginContact)
 	
 	score = 0
+	
+
 	record = 0
+	-- Nome: Variável 'record'
+	-- Propriedade: Endereço
+	-- Binding time: Compilação
+	-- Explicação: Por ser uma variável global(estática), o endereço é
+	-- pré determinado em tempo de compilação
 	
 	objects = {}
+
 	
 	--Parede da esquerda
 	objects.wallLeft = {}
@@ -52,6 +60,11 @@ function love.load()
 end
 
 function love.update(dt)
+	-- Nome: Variável 'dt'
+	-- Propriedade: Endereço
+	-- Binding time: Execução
+	-- Explicação: Por 'dt' ser uma variável local e ter escopo limitado a
+	-- função 'love.update', seu endereço é definido em tempo de execução
 
 	world:update(dt)
 	
@@ -61,6 +74,11 @@ function love.update(dt)
 	elseif love.keyboard.isDown("left") then
 		objects.polygon.body:setPosition(objects.polygon.body:getX() - 15, love.graphics.getHeight()-7.5)
 	end
+	-- Nome: Palavra reservada 'then'
+	-- Propriedade: Definição de estrutura de decisão
+	-- Binding time: Design
+	-- Explicação: Foi definido, durante a implementação da linguagem, 
+	-- que a palavra reservada 'else' definiria o fim da sentença lógica do bloco de decisão
 	
 	--Limitando a plataforma até as paredes
 	if objects.polygon.body:getX() < 86 then
@@ -68,6 +86,12 @@ function love.update(dt)
 	elseif objects.polygon.body:getX() > love.graphics.getWidth()-86 then
 		objects.polygon.body:setX(love.graphics.getWidth()-86)
 	end
+	-- Nome: Palavra reservada 'end'
+	-- Propriedade: Definição de estrutura de decisão
+	-- Binding time: Design
+	-- Explicação: Foi definido, durante a implementação da linguagem, 
+	-- que a palavra reservada 'end' definiria o fim do bloco de decisão
+
 
 	--Reiniciando o jogo
 	if objects.ball.body:getY() > love.graphics.getHeight() then
@@ -106,8 +130,20 @@ function love.draw()
 end
 
 function beginContact(a, b)
+-- Nome: Variável 'b'
+-- Propriedade: Valor
+-- Binding time: Execução
+-- Explicação: A variável 'b' só receberá algum valor quando a função
+-- for executada, ou seja, em tempo de execução
+
 	--Contando os contatos entre a Bola e a Plataforma
 	if	a:getUserData() == "Floor" and b:getUserData()=="Ball" then
 		score = score + 1
+	-- Nome: Operador '+'
+	-- Propriedade: Semântica da linguagem
+	-- Binding time: Compilação
+	-- Explicaçao: A instrução de adição é definida em tempo de
+	-- compilação, dependendo dos tipos dos operandos
+	-- (double, float, int)
 	end
 end
