@@ -82,14 +82,13 @@ function love.update(dt)
 		--Criando as bolas (Trabalho 05: criar novos objetos periodicamente)
 		bolas[i] = {}
 		--Escopo: Global
-		--Tempo de vida: Desde a sua criação até o final da execução, ou até que seja criado outro objeto por cima (Irá acontece quando o jogo for resetado)
+		--Tempo de vida: Desde a sua criação até a execução da linha 124
 		--Alocação: A alocação é feita dinamicamente. Neste caso, alocamos um array dentro de outro array
-		--Desalocação: Ao final da execução
+		--Desalocação: Linha 124
 
 		bolas[i].body = love.physics.newBody(world, love.graphics.getWidth()/2, 20, "dynamic")
 		bolas[i].shape = love.physics.newCircleShape(10)
 		bolas[i].fixture = love.physics.newFixture(bolas[i].body, bolas[i].shape)
-		bolas[i].inGame = true
 		bolas[i].body:setLinearVelocity(0, 850 + contball*50)
 		bolas[i].fixture:setRestitution(1.005)
 		bolas[i].fixture:setFriction(0)
@@ -119,9 +118,11 @@ function love.update(dt)
 	--Remover bolas (Trabalho 05: remover objetos)
 	if not gameover then
 		for j = 1, i do
-			if (bolas[j].body:getY() > love.graphics.getHeight()) and bolas[j].inGame then
-				contball = contball - 1
-				bolas[j].inGame = false
+			if bolas[j] ~= nil then
+				if bolas[j].body:getY() > love.graphics.getHeight() then
+					contball = contball - 1
+					bolas[j] = nil --Desaloca
+				end
 			end
 		end
 	end
@@ -165,7 +166,7 @@ function love.draw()
 	
 	--Desenhando as Bolas
 	for j = 1, i do
-		if bolas[j].inGame then
+		if bolas[j] ~= nil then
 			love.graphics.setColor(255, 255, 255)
 			love.graphics.circle("fill", bolas[j].body:getX(), bolas[j].body:getY(), bolas[j].shape:getRadius())
 		end
