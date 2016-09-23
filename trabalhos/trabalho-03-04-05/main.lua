@@ -13,8 +13,6 @@ function love.load()
 
 	aux = 0 --Auxiliar de intervalo entre tempo de surgimento de bolas
 
-	i = 0 --Auxiliar para iterar no array bolas
-
 	contball = 0 --Contador de bolas em movimento
 
 	gameover = false
@@ -77,22 +75,25 @@ function love.update(dt)
 
 	if temp > aux and not gameover then
 		aux = aux + 6
-		i = i + 1
+		j = 0
+		while bolas[j] ~= nil do
+			j = j + 1
+		end
 
 		--Criando as bolas (Trabalho 05: criar novos objetos periodicamente)
-		bolas[i] = {}
+		bolas[j] = {}
 		--Escopo: Global
 		--Tempo de vida: Desde a sua criação até a execução da linha 124
 		--Alocação: A alocação é feita dinamicamente. Neste caso, alocamos um array dentro de outro array
 		--Desalocação: Linha 124
 
-		bolas[i].body = love.physics.newBody(world, love.graphics.getWidth()/2, 20, "dynamic")
-		bolas[i].shape = love.physics.newCircleShape(10)
-		bolas[i].fixture = love.physics.newFixture(bolas[i].body, bolas[i].shape)
-		bolas[i].body:setLinearVelocity(0, 850 + contball*50)
-		bolas[i].fixture:setRestitution(1.005)
-		bolas[i].fixture:setFriction(0)
-		bolas[i].fixture:setUserData("Ball$contball")
+		bolas[j].body = love.physics.newBody(world, love.graphics.getWidth()/2, 20, "dynamic")
+		bolas[j].shape = love.physics.newCircleShape(10)
+		bolas[j].fixture = love.physics.newFixture(bolas[j].body, bolas[j].shape)
+		bolas[j].body:setLinearVelocity(0, 850 + contball*50)
+		bolas[j].fixture:setRestitution(1.005)
+		bolas[j].fixture:setFriction(0)
+		bolas[j].fixture:setUserData("Ball$contball")
 		contball = contball + 1
 	end
 	-- Nome: Palavra reservada 'then'
@@ -117,11 +118,11 @@ function love.update(dt)
 
 	--Remover bolas (Trabalho 05: remover objetos)
 	if not gameover then
-		for j = 1, i do
-			if bolas[j] ~= nil then
-				if bolas[j].body:getY() > love.graphics.getHeight() then
+		for i = 0, contball do
+			if bolas[i] ~= nil then
+				if bolas[i].body:getY() > love.graphics.getHeight() then
 					contball = contball - 1
-					bolas[j] = nil --Desaloca
+					bolas[i] = nil --Desaloca
 				end
 			end
 		end
@@ -150,7 +151,6 @@ function love.update(dt)
 	--Resetando o jogo
 	if love.keyboard.isDown("r") and gameover then
 		gameover = false
-		i = 0
 		contball = 0
 		temp = 0
 		aux = 0
@@ -165,10 +165,10 @@ function love.draw()
 	love.graphics.polygon("fill", objects.polygon.body:getWorldPoints(objects.polygon.shape:getPoints()))
 	
 	--Desenhando as Bolas
-	for j = 1, i do
-		if bolas[j] ~= nil then
+	for i = 0, contball do
+		if bolas[i] ~= nil then
 			love.graphics.setColor(255, 255, 255)
-			love.graphics.circle("fill", bolas[j].body:getX(), bolas[j].body:getY(), bolas[j].shape:getRadius())
+			love.graphics.circle("fill", bolas[i].body:getX(), bolas[i].body:getY(), bolas[i].shape:getRadius())
 		end
 	end
 
