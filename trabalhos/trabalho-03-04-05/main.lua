@@ -6,6 +6,10 @@ function love.load()
 	world:setCallbacks(beginContact)
 	
 	score = 0 --Pontuação atual
+	-- Nome: score
+	-- Propriedade: Endereço
+	-- Binding Time: Compilação
+	-- Explicação: Por ser uma variável global, seu endereço é conhecido em tempo de compilação
 	
 	record = 0 --Maior pontuação alcançada
 	
@@ -57,21 +61,20 @@ function love.load()
 end
 
 function love.update(dt)
-	-- Nome: Variável 'dt'
+	-- Nome: dt
 	-- Propriedade: Endereço
 	-- Binding time: Execução
 	-- Explicação: Por 'dt' ser uma variável local e ter escopo limitado a
-	-- função 'love.update', seu endereço é definido em tempo de execução
+	-- 	       função 'love.update', seu endereço é definido em tempo de execução
 
 	world:update(dt)
 	
 	temp = temp + dt
-	-- Nome: Operador '+'
+	-- Nome: +
 	-- Propriedade: Semântica da linguagem
 	-- Binding time: Compilação
 	-- Explicaçao: A instrução de adição é definida em tempo de
-	-- compilação, dependendo dos tipos dos operandos
-	-- (double, float, int)
+	--             compilação, dependendo dos tipos dos operandos
 
 	if temp > aux and not gameover then
 		aux = aux + 6
@@ -96,11 +99,11 @@ function love.update(dt)
 		bolas[j].fixture:setUserData("Ball$contball")
 		contball = contball + 1
 	end
-	-- Nome: Palavra reservada 'then'
-	-- Propriedade: Definição de estrutura de decisão
+	-- Nome: then
+	-- Propriedade: Semântica
 	-- Binding time: Design
 	-- Explicação: Foi definido, durante a implementação da linguagem, 
-	-- que a palavra reservada 'else' definiria o fim da sentença lógica do bloco de decisão
+	-- 	       que a palavra reservada 'then' definiria o fim da sentença lógica do bloco de decisão
 
 	--Movendo a plataforma
 	if love.keyboard.isDown("right") and not gameover then
@@ -127,11 +130,11 @@ function love.update(dt)
 			end
 		end
 	end
-	-- Nome: Palavra reservada 'end'
-	-- Propriedade: Definição de estrutura de decisão
+	-- Nome: end
+	-- Propriedade: Semântica
 	-- Binding time: Design
 	-- Explicação: Foi definido, durante a implementação da linguagem, 
-	-- que a palavra reservada 'end' definiria o fim do bloco de decisão
+	-- 	       que a palavra reservada 'end' definiria o fim do bloco de decisão
 
 	if contball == 0 and not gameover then
 		gameover = true
@@ -140,12 +143,6 @@ function love.update(dt)
 		end
 		score = 0
 		objects.polygon.body:setPosition(love.graphics.getWidth()/2, love.graphics.getHeight()-7.5)
-		-- Nome: Operador '-'
-		-- Propriedade: Semântica da linguagem
-		-- Binding time: Compilação
-		-- Explicaçao: A instrução de subtração é definida em tempo de
-		-- compilação, dependendo dos tipos dos operandos
-		-- (double, float, int)
 	end
 
 	--Resetando o jogo
@@ -196,11 +193,11 @@ end
 
 
 function beginContact(a, b) --Colisão (Trabalho 05: Objetos devem interagir entre si)
--- Nome: Variável 'b'
+-- Nome: b
 -- Propriedade: Valor
 -- Binding time: Execução
 -- Explicação: A variável 'b' só receberá algum valor quando a função
--- for executada, ou seja, em tempo de execução
+-- 	       for executada, ou seja, em tempo de execução
 
 	ator1 = a:getUserData()
 	ator2 = b:getUserData()
