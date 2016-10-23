@@ -4,14 +4,19 @@ function love.load()
 	world = love.physics.newWorld(0, 0, true)
 	world:setCallbacks(beginContact)
 	
-	score = 0
-	-- Trabalho 04
+	-- Trabalho 06: Registro
+	saida = { score = 0,
+	-- Trabalho 04 (Quando o trabalho 4 foi feito, 'score' não pertencia a variável de registro 'saida')
 	-- Nome: score
 	-- Propriedade: Endereço
 	-- Binding Time: Compilação
 	-- Explicação: Por ser uma variável global, seu endereço é conhecido em tempo de compilação
+	record = 0 }
 
-	record = 0
+	-- Trabalho 06: Tupla
+	msgGameOver = {"Game Over =(", 220, 250, 0, 4, 4}
+	msgRecord = {"Record: ", 340, 310, 0, 2, 2}
+	msgToReset = {"Press R to Reset!", 290, 340, 0, 2, 2}
 	
 	temp = 0
 
@@ -21,6 +26,8 @@ function love.load()
 
 	gameover = false
 
+
+	-- Trabalho 06: Array
 	objects = {}
 	-- Trabalho 05: coleção dinâmica de objetos
 	-- Coleção dinamica de objetos
@@ -29,6 +36,7 @@ function love.load()
 	-- Alocação: A alocação é feita dinamicamente e não tem tamanho fixo, ou seja, é ilimitada
 	-- Desalocação: Ao final da execução
 
+	-- Trabalho 06: Dicionário
 	bolas = {}
 	
 	objects.wallLeft = {}
@@ -138,10 +146,10 @@ function love.update(dt)
 
 	if contball == 0 and not gameover then
 		gameover = true
-		if score > record then
-			record = score
+		if saida.score > saida.record then
+			saida.record = saida.score
 		end
-		score = 0
+		saida.score = 0
 		objects.polygon.body:setPosition(love.graphics.getWidth()/2, love.graphics.getHeight()-7.5)
 	end
 
@@ -173,15 +181,15 @@ function love.draw()
 
 	if not gameover then
 		love.graphics.setColor(180, 180, 180)
-		love.graphics.print("Score: " .. score, 340, 280, 0, 2, 2)
-		love.graphics.print("Record: " .. record, 340, 310, 0, 2, 2)
+		love.graphics.print("Score: " .. saida.score, 340, 280, 0, 2, 2)
+		love.graphics.print("Record: " .. saida.record, 340, 310, 0, 2, 2)
 	end
 
 	if gameover then
 		love.graphics.setColor(180, 180, 180)
-		love.graphics.print("Game Over =(", 220, 250, 0, 4, 4)
-		love.graphics.print("Record: " .. record, 340, 310, 0, 2, 2)
-		love.graphics.print("Press R to Reset!", 290, 340, 0, 2, 2)
+		love.graphics.print(msgGameOver[1], msgGameOver[2], msgGameOver[3], msgGameOver[4], msgGameOver[5])
+		love.graphics.print(msgRecord[1] .. saida.record, msgRecord[2], msgRecord[3], msgRecord[4], msgRecord[5], msgRecord[6])
+		love.graphics.print(msgToReset[1], msgToReset[2], msgToReset[3], msgToReset[4], msgToReset[5])
 	end
 	
 end
@@ -200,7 +208,7 @@ function beginContact(a, b)
 
 	if ator1 ~= nil and ator2 ~= nil then
 		if	(a:getUserData() == "Floor" and (string.find(ator2, "Ball") ~= nil))  or ((string.find(ator1, "Ball") ~= nil) and b:getUserData()=="Floor") then
-			score = score + 1
+			saida.score = saida.score + 1
 		end
 	end
 end
