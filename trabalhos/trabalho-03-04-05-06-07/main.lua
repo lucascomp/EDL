@@ -26,6 +26,8 @@ function love.load()
 
 	gameover = false
 
+	--Trabalho 07: Closure
+	tempo = newTempo(0, 0)
 
 	-- Trabalho 06: Array
 	objects = {}
@@ -57,13 +59,21 @@ function love.load()
 	objects.roof.fixture = love.physics.newFixture(objects.roof.body, objects.roof.shape)
 	objects.roof.fixture:setFriction(0)
 
-	objects.polygon = {}
-	objects.polygon.body = love.physics.newBody(world, love.graphics.getWidth()/2, love.graphics.getHeight()-7.5)
-	objects.polygon.shape = love.physics.newPolygonShape(-75, -4, 1, -15, 75, -4, -75, 7.5, 75, 7.5)
-	objects.polygon.fixture = love.physics.newFixture(objects.polygon.body, objects.polygon.shape)
-	objects.polygon.fixture:setFriction(0)
-	objects.polygon.fixture:setUserData("Floor")
+	objects.obstacle = {}
+	objects.obstacle.body = love.physics.newBody(world, love.graphics.getWidth()/2-230, love.graphics.getHeight()/2-50)
+	objects.obstacle.shape = love.physics.newRectangleShape(love.graphics.getWidth()/8, 10)
+	objects.obstacle.fixture = love.physics.newFixture(objects.obstacle.body, objects.obstacle.shape)
+	objects.obstacle.fixture:setFriction(0)
+
+	objects.floor = {}
+	objects.floor.body = love.physics.newBody(world, love.graphics.getWidth()/2, love.graphics.getHeight()-7.5)
+	objects.floor.shape = love.physics.newPolygonShape(-75, -4, 1, -15, 75, -4, -75, 7.5, 75, 7.5)
+	objects.floor.fixture = love.physics.newFixture(objects.floor.body, objects.floor.shape)
+	objects.floor.fixture:setFriction(0)
+	objects.floor.fixture:setUserData("Floor")
 	
+	c1 = coroutine.create(moveObstacle)
+
 end
 
 function love.update(dt)
@@ -71,19 +81,25 @@ function love.update(dt)
 	-- Nome: dt
 	-- Propriedade: Endereço
 	-- Binding time: Execução
-	-- Explicação: Por 'dt' ser uma variável local e ter escopo limitado a
-	-- 	       função 'love.update', seu endereço é definido em tempo de execução
+	-- Explicação: Por 'dt' ser uma variável local e ter escopo limitado a função 'love.update', seu endereço é definido em tempo de execução
 
 	world:update(dt)
-	
+
+	minuto, segundo = tempo.add(dt)
+
 	temp = temp + dt
 	-- Trabalho 04
 	-- Nome: +
 	-- Propriedade: Semântica da linguagem
 	-- Binding time: Compilação
-	-- Explicaçao: A instrução de adição é definida em tempo de
-	--             compilação, dependendo dos tipos dos operandos
+	-- Explicaçao: A instrução de adição é definida em tempo de compilação, dependendo dos tipos dos operandos
 
+	-- Trabalho 07: Co-rotina
+	coroutine.resume(c1, dt)
+	if objects.obstacle.body:getY() < love.graphics.getHeight()/2-50 then
+		objects.obstacle.body:setPosition(love.graphics.getWidth()/2-230, love.graphics.getHeight()/2-50)
+	end
+	
 	if temp > aux and not gameover then
 		aux = aux + 6
 		j = 0
@@ -115,15 +131,15 @@ function love.update(dt)
 	-- 	       que a palavra reservada 'then' definiria o fim da sentença lógica do bloco de decisão
 
 	if love.keyboard.isDown("right") and not gameover then
-		objects.polygon.body:setPosition(objects.polygon.body:getX() + 18, love.graphics.getHeight()-7.5)
+		objects.floor.body:setPosition(objects.floor.body:getX() + 18, love.graphics.getHeight()-7.5)
 	elseif love.keyboard.isDown("left") and not gameover then
-		objects.polygon.body:setPosition(objects.polygon.body:getX() - 18, love.graphics.getHeight()-7.5)
+		objects.floor.body:setPosition(objects.floor.body:getX() - 18, love.graphics.getHeight()-7.5)
 	end
 	
-	if objects.polygon.body:getX() < 86 then
-		objects.polygon.body:setX(86)
-	elseif objects.polygon.body:getX() > love.graphics.getWidth()-86 then
-		objects.polygon.body:setX(love.graphics.getWidth()-86)
+	if objects.floor.body:getX() < 86 then
+		objects.floor.body:setX(86)
+	elseif objects.floor.body:getX() > love.graphics.getWidth()-86 then
+		objects.floor.body:setX(love.graphics.getWidth()-86)
 	end
 
 	-- Trabalho 05: remover objetos
@@ -141,8 +157,7 @@ function love.update(dt)
 	-- Nome: end
 	-- Propriedade: Semântica
 	-- Binding time: Design
-	-- Explicação: Foi definido, durante a implementação da linguagem, 
-	-- 	       que a palavra reservada 'end' definiria o fim do bloco de decisão
+	-- Explicação: Foi definido, durante a implementação da linguagem, que a palavra reservada 'end' definiria o fim do bloco de decisão
 
 	if contball == 0 and not gameover then
 		gameover = true
@@ -150,7 +165,7 @@ function love.update(dt)
 			saida.record = saida.score
 		end
 		saida.score = 0
-		objects.polygon.body:setPosition(love.graphics.getWidth()/2, love.graphics.getHeight()-7.5)
+		objects.floor.body:setPosition(love.graphics.getWidth()/2, love.graphics.getHeight()-7.5)
 	end
 
 	if love.keyboard.isDown("r") and gameover then
@@ -158,14 +173,13 @@ function love.update(dt)
 		contball = 0
 		temp = 0
 		aux = 0
+		objects.obstacle.body:setPosition(love.graphics.getWidth()/2-230, love.graphics.getHeight()/2-50)
+		tempo = newTempo(0, 0)
 	end
 
 end
 
 function love.draw()
-
-	love.graphics.setColor(215, 60, 130)
-	love.graphics.polygon("fill", objects.polygon.body:getWorldPoints(objects.polygon.shape:getPoints()))
 	
 	for i = 0, contball do
 		if bolas[i] ~= nil then
@@ -181,17 +195,32 @@ function love.draw()
 
 	if not gameover then
 		love.graphics.setColor(180, 180, 180)
-		love.graphics.print("Score: " .. saida.score, 340, 280, 0, 2, 2)
-		love.graphics.print("Record: " .. saida.record, 340, 310, 0, 2, 2)
-	end
 
-	if gameover then
+		if minuto >= 10 and segundo >= 10 then
+			love.graphics.print(minuto .. ":" .. segundo, 12, 12, 0, 1, 1)
+		elseif minuto >= 10 then
+			love.graphics.print(minuto .. ":0"  .. segundo, 12, 12, 0, 1, 1)
+		elseif segundo >= 10 then
+			love.graphics.print("0" .. minuto .. ":" .. segundo, 12, 12, 0, 1, 1)
+		else
+			love.graphics.print("0" .. minuto .. ":0" .. segundo, 12, 12, 0, 1, 1)
+		end
+
+		love.graphics.print("Score: " .. saida.score, love.graphics.getWidth()/2-52, 280, 0, 2, 2)
+		love.graphics.print("Record: " .. saida.record, love.graphics.getWidth()/2-60, 310, 0, 2, 2)
+		love.graphics.setColor(102, 204, 0)
+		love.graphics.polygon("fill", objects.obstacle.body:getWorldPoints(objects.obstacle.shape:getPoints()))
+		love.graphics.setColor(215, 60, 130)
+		love.graphics.polygon("fill", objects.floor.body:getWorldPoints(objects.floor.shape:getPoints()))
+	else
 		love.graphics.setColor(180, 180, 180)
 		love.graphics.print(msgGameOver[1], msgGameOver[2], msgGameOver[3], msgGameOver[4], msgGameOver[5])
 		love.graphics.print(msgRecord[1] .. saida.record, msgRecord[2], msgRecord[3], msgRecord[4], msgRecord[5], msgRecord[6])
 		love.graphics.print(msgToReset[1], msgToReset[2], msgToReset[3], msgToReset[4], msgToReset[5])
 	end
 	
+	
+
 end
 
 -- Trabalho 05: Objetos devem interagir entre si
@@ -200,8 +229,7 @@ function beginContact(a, b)
 -- Nome: b
 -- Propriedade: Valor
 -- Binding time: Execução
--- Explicação: A variável 'b' só receberá algum valor quando a função
--- 	       for executada, ou seja, em tempo de execução
+-- Explicação: A variável 'b' só receberá algum valor quando a função for executada, ou seja, em tempo de execução
 
 	ator1 = a:getUserData()
 	ator2 = b:getUserData()
@@ -209,6 +237,45 @@ function beginContact(a, b)
 	if ator1 ~= nil and ator2 ~= nil then
 		if	(a:getUserData() == "Floor" and (string.find(ator2, "Ball") ~= nil))  or ((string.find(ator1, "Ball") ~= nil) and b:getUserData()=="Floor") then
 			saida.score = saida.score + 1
+		end
+	end
+end
+
+-- Trabalho 07: Closure
+function newTempo(minuto, segundo)
+	return {
+		add = function (dt)
+			segundo = segundo + dt
+			if segundo >= 60 then
+				segundo = segundo - 60
+				minuto = minuto + 1
+			end
+			return minuto, math.floor(segundo)
+		end
+	}
+end
+
+-- Trabalho 07: Co-rotina
+function moveObstacle (dt)
+	while true do -- O objetivo desse 'while' é fazer com que o Obstáculo fique dando volta para sempre. A lógica da co-rotina vem abaixo:
+		while objects.obstacle.body:getX() < love.graphics.getWidth()/2+230 do
+			objects.obstacle.body:setPosition(objects.obstacle.body:getX()+dt*16000, objects.obstacle.body:getY())
+			coroutine.yield()
+		end
+
+		while objects.obstacle.body:getY() < love.graphics.getHeight()/2+50 do
+			objects.obstacle.body:setPosition(objects.obstacle.body:getX(), objects.obstacle.body:getY()+dt*8000)
+		 	coroutine.yield()
+		end
+
+		while objects.obstacle.body:getX() > love.graphics.getWidth()/2-230  do
+			objects.obstacle.body:setPosition(objects.obstacle.body:getX()-dt*16000, objects.obstacle.body:getY())
+			coroutine.yield()
+		end
+
+		while objects.obstacle.body:getY() > love.graphics.getHeight()/2-50  do
+			objects.obstacle.body:setPosition(objects.obstacle.body:getX(), objects.obstacle.body:getY()-dt*8000)
+			coroutine.yield()
 		end
 	end
 end
